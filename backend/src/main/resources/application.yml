@@ -3,13 +3,19 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/guiche
+    url: jdbc:postgresql://localhost:5433/guiche
     username: postgres
-    password: sua_senha
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 kafka:
   bootstrap-servers: localhost:9092
@@ -17,6 +23,8 @@ kafka:
   consumer:
     group-id: painel-group
     auto-offset-reset: earliest
+    key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
   listener:
     missing-topics-fatal: false

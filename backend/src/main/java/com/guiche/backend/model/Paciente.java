@@ -1,36 +1,54 @@
 package com.guiche.backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import org.springframework.data.annotation.Id;
-
+import jakarta.persistence.*;
+import jakarta.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
+@Table(name = "pacientes")
 public class Paciente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nome;
+
+    @Column(unique = true, length = 11)
     private String cpf;
-    private LocalDate dataNascimento;
 
-    public Long getId() {
-        this.id = id;
-    }
+    @Column(name = "data_nasc")
+    private LocalDate dataNasc;
 
-    public String getNome() {
+    @Column(name = "data_cadastro")
+    private LocalDateTime dataCadastro;
+
+    public Long getId() { return id; }
+    public String getNome() { return nome; }
+    public String getCpf() { return cpf; }
+    public LocalDate getDataNasc() { return dataNasc; }
+    public LocalDateTime getDataCadastro() { return dataCadastro; }
+
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public String getCpf() {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
-    public LocalDate getDataNascimento() {
-        this.dataNascimento = dataNascimento;
+    public void setDataNasc(LocalDate dataNasc) {
+        this.dataNasc = dataNasc;
     }
 
-    // getters e setters
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Paciente)) return false;
+        Paciente paciente = (Paciente) o;
+        return id != null && id.equals(paciente.id);
+    }
+
 }

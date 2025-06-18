@@ -19,7 +19,7 @@ public class KafkaProducerService {
 
     public void enviarPacienteDTO(String topico, Paciente paciente) {
         try {
-            PacienteDTO dto = new PacienteDTO(paciente.getId(), paciente.getNome(), paciente.getCpf(), paciente.getDataNascimento());
+            PacienteDTO dto = new PacienteDTO(paciente.getId(), paciente.getNome(), paciente.getCpf(), paciente.getDataNasc(), paciente.getDataCadastro());
             String json = objectMapper.writeValueAsString(dto);
             kafkaTemplate.send(topico, json);
         } catch (JsonProcessingException e) {
