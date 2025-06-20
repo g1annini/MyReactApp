@@ -1,15 +1,18 @@
 package com.guiche.backend.controller;
 
+
 import com.guiche.backend.dto.PacienteAtualizacaoDTO;
 import com.guiche.backend.model.Paciente;
 import com.guiche.backend.repository.PacienteRepository;
 import com.guiche.backend.service.KafkaProducerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/pacientes")
@@ -31,8 +34,9 @@ public class PacienteController {
     }
 
     @PostMapping
-    public Paciente cadastrar(@RequestBody Paciente paciente) {
-        return pacienteRepository.save(paciente);
+    public ResponseEntity<Paciente> cadastrar(@RequestBody @Valid Paciente paciente) {
+        Paciente salvo = pacienteRepository.save(paciente);
+        return ResponseEntity.status(201).body(salvo);
     }
 
     @PutMapping("/{id}")
@@ -61,4 +65,18 @@ public class PacienteController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletar(@PathVariable Long id) {
+        return pacienteRepository.findById(id)
+                .map(paciente -> {
+                    pacienteRepository.delete(paciente);
+                    return ResponseEntity.noContent().build(); // ✔️ 204 No Content — sem corpo
+                })
+                .orElseGet  (() -> ResponseEntity.notFound().build()); // ✔️ 404 — também sem corpo
+    }
+
+
+
+
 }
